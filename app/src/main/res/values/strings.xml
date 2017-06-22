@@ -2,6 +2,9 @@
     <string name="app_name">AgntSmith</string>
     <string name="title_command">Set command</string>
     <string name="title_log">Command Log</string>
-    <string name="config_file">Set config file</string>
-    <string name="saved_config_path"/>
+    <string name="config_file">Config file</string>
+    <string name="saved_config_path">saved_config_path</string>
+    <string name="claster_name">Claster name</string>
+    <string name="saved_cluster_name">saved_cluster_name</string>
+
 </resources>

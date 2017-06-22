@@ -13,18 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import ua.vzaperti.matrix.net.MatrixEvent;
 
 public class MainActivity extends AppCompatActivity implements OnCommandSendListener {
     private static final int FILE_SELECT_CODE = 0;
+
     LanCommunication<MatrixEvent> mLanCommunication;
+    LanCommunication.MessageListener<MatrixEvent> mMessageListener;
+
     private CommandFragment mCommandFragment;
     private LogFragment mLogFragment;
 
-
     String mConfigPath;
+    String mClusterName;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -53,20 +57,14 @@ public class MainActivity extends AppCompatActivity implements OnCommandSendList
         mCommandFragment = new CommandFragment();
         mLogFragment = new LogFragment();
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        mConfigPath = sharedPref.getString(getString(R.string.saved_config_path), null);
-
-        if (mConfigPath == null) {
-            alertLoadingDefaults();
-        }
-        mLanCommunication = new LanCommunication<>("alz313 group", mConfigPath);
-        mLanCommunication.addMessageListemer(new LanCommunication.MessageListener<MatrixEvent>() {
+        mMessageListener = new LanCommunication.MessageListener<MatrixEvent>() {
             @Override
             public void recieve(MatrixEvent message) {
                 mLogFragment.addMessage(message.name());
             }
-        });
+        };
 
+        updateCommunication();
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mCommandFragment).commit();
 
@@ -97,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements OnCommandSendList
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString(getString(R.string.saved_config_path), mConfigPath);
                         editor.apply();
+
+                        updateCommunication();
                     } else {
                         Toast.makeText(this, "Bad file path.\nTry other file Chooser!", Toast.LENGTH_LONG).show();
                     }
@@ -116,12 +116,48 @@ public class MainActivity extends AppCompatActivity implements OnCommandSendList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.conf_file:
+            case R.id.menu_config_file:
                 showFileChooser();
+                return true;
+            case R.id.menu_claster_name:
+                final EditText taskEditText = new EditText(this);
+                taskEditText.setText(mClusterName);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("Cluster name")
+                        .setMessage("Select cluster name")
+                        .setView(taskEditText)
+                        .setPositiveButton("Same", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mClusterName = String.valueOf(taskEditText.getText());
+                                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString(getString(R.string.saved_cluster_name), mClusterName);
+                                editor.apply();
+
+                                updateCommunication();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void updateCommunication() {
+        if (mLanCommunication != null) {
+            mLanCommunication.removeMessageListemer(mMessageListener);
+        }
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        mConfigPath = sharedPref.getString(getString(R.string.saved_config_path), null);
+        mClusterName = sharedPref.getString(getString(R.string.saved_cluster_name), null);
+
+        mLanCommunication = new LanCommunication<>(mClusterName, mConfigPath);
+        mLanCommunication.addMessageListemer(mMessageListener);
     }
 
     private void showFileChooser() {
@@ -137,18 +173,4 @@ public class MainActivity extends AppCompatActivity implements OnCommandSendList
         }
     }
 
-    private void alertLoadingDefaults() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("No valid config file.");
-        alertDialogBuilder.setMessage("Will load defaults.");
-        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-
-    }
 }

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/conf_file"
+        android:id="@+id/menu_config_file"
         android:title="@string/config_file"/>
+    <item
+        android:id="@+id/menu_claster_name"
+        android:title="@string/claster_name"/>
+
+
 </menu>

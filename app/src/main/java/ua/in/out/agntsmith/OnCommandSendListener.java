@@ -12,6 +12,5 @@ package ua.in.out.agntsmith;
  */
 
 public interface OnCommandSendListener {
-    // TODO: Update argument type and name
     void onCommandSend(int item);
 }
