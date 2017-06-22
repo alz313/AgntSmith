@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AgntSmith</string>
+    <string name="title_command">Set command</string>
+    <string name="title_log">Command Log</string>
+    <string name="config_file">Set config file</string>
+    <string name="saved_config_path"/>
+</resources>
