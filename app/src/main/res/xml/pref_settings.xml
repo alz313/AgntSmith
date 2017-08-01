@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/pref_config_file_path_key"
+        android:defaultValue="@string/pref_config_file_path_default"
+        android:title="@string/pref_config_file_path_label"/>
+    <EditTextPreference
+        android:key="@string/pref_cluster_name_key"
+        android:defaultValue="@string/pref_cluster_name_default"
+        android:title="@string/pref_cluster_name_label"/>
+</PreferenceScreen>

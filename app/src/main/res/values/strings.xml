@@ -3,8 +3,16 @@
     <string name="title_command">Set command</string>
     <string name="title_log">Command Log</string>
     <string name="config_file">Config file</string>
-    <string name="saved_config_path">saved_config_path</string>
     <string name="claster_name">Claster name</string>
-    <string name="saved_cluster_name">saved_cluster_name</string>
+    <string name="settings">Settings</string>
+    <string name="label_settings">Settings</string>
+
+    <string name="pref_cluster_name_label">Cluster name</string>
+    <string name="pref_cluster_name_default">Matrix claster</string>
+    <string name="pref_cluster_name_key" translatable="false">saved_cluster_name</string>
+
+    <string name="pref_config_file_path_label">Settings file location</string>
+    <string name="pref_config_file_path_default">Configuration file not specified, used defaults</string>
+    <string name="pref_config_file_path_key" translatable="false">saved_config_path</string>
 
 </resources>
